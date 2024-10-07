@@ -26,7 +26,7 @@ function App() {
 
   return (
     <div>
-      <h1>Cocktail Ingredient Search</h1>
+      <h1>Cocktail Ingredient and Information Search</h1>
       <input 
         type="text" 
         value={search} 
