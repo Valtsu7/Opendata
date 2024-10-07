@@ -22,7 +22,7 @@ function App() {
     };
 
     fetchData();
-  }, [search]); //
+  }, [search]); 
 
   return (
     <div>
