@@ -2,27 +2,33 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function App() {
-  const [ingredientData, setIngredientData] = useState(null); // API-tiedot
-  const [search, setSearch] = useState('vodka'); // Hakusana
-  const [isLoading, setIsLoading] = useState(true); // Lataustila
-  const [error, setError] = useState(null); // Virheiden käsittely
+  const [ingredientData, setIngredientData] = useState(null);
+  const [search, setSearch] = useState('vodka');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // API-kutsu
     const fetchData = async () => {
       try {
         setIsLoading(true);
+        setError(null); 
         const response = await axios.get(`https://www.thecocktaildb.com/api/json/v1/1/search.php?i=${search}`);
-        setIngredientData(response.data.ingredients[0]);
+        
+        
+        if (response.data.ingredients && response.data.ingredients.length > 0) {
+          setIngredientData(response.data.ingredients[0]);
+        } else {
+          setError('Ingredient not found'); 
+        }
       } catch (err) {
-        setError('Failed to fetch data');
+        setError('Failed to fetch data'); 
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [search]); 
+  }, [search]);
 
   return (
     <div>
@@ -37,7 +43,9 @@ function App() {
       {error && <p>{error}</p>}
       {ingredientData && (
         <div>
+          <p>Example ingridients that you can search: vodka, gin, rum, whiskey, tequila, brandy, vermouth</p>
           <h2>{ingredientData.strIngredient}</h2>
+          <p><strong>Type:</strong> {ingredientData.strType}</p>
           <p><strong>Alcohol:</strong> {ingredientData.strAlcohol}</p>
           <p><strong>ABV:</strong> {ingredientData.strABV}%</p>
           <p>{ingredientData.strDescription}</p>
